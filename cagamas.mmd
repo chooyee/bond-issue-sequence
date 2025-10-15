@@ -1,36 +1,36 @@
 sequenceDiagram
-    title Cagamas Bond / Sukuk Issuance Flow
-
-    participant Investor
+    title Cagamas Bond / Sukuk Issuance Flow with ADI
+    participant Investor as Investor
+    participant ADI as Approved Deposit Taking Institute
     participant LeadArranger as Lead Arranger / Dealer
     participant Cagamas as Cagamas Berhad
     participant Originator as Originating Bank
     participant Trustee as Trustee / Registrar
     participant PaymentAgent as Payment Agent
-
     %% Phase 1: Loan Acquisition
     Originator->>Cagamas: Offer to sell housing loans / Islamic financing
     Cagamas-->>Originator: Conduct due diligence & valuation
     Cagamas->>Originator: Purchase loans / financing portfolio
     Originator-->>Cagamas: Transfer loan ownership
-
     %% Phase 2: Funding via Bond / Sukuk
     Cagamas->>LeadArranger: Mandate to structure bond/sukuk
     LeadArranger->>Cagamas: Prepare Information Memorandum / Term Sheet
-    LeadArranger->>Investor: Market and distribute bond/sukuk
-    Investor->>LeadArranger: Subscribe and pay for bond/sukuk
+    LeadArranger->>ADI: Provide bond/sukuk details for investor communication
+    ADI->>Investor: Disseminate information & invite subscription
+    Investor->>ADI: Subscribe and remit funds for bond/sukuk
+    ADI->>LeadArranger: Forward investor subscriptions and funds
     LeadArranger->>Cagamas: Transfer proceeds (net of fees)
     Cagamas-->>Investor: Issue bond/sukuk certificates
     Cagamas->>Trustee: Register bond/sukuk and trust deed
-    Cagamas->>PaymentAgent: Appoint to handle periodic coupon / profit payments
-
+    Cagamas->>PaymentAgent: Appoint to handle periodic coupon/profit payments
     %% Phase 3: Ongoing Management
     Originator->>Cagamas: Make periodic repayments (principal + interest/profit)
-    Cagamas->>PaymentAgent: Transfer coupon / profit for distribution
-    PaymentAgent->>Investor: Pay periodic coupon / profit
+    Cagamas->>PaymentAgent: Transfer coupon/profit for distribution
+    PaymentAgent->>ADI: Forward coupon/profit details for processing
+    ADI->>Investor: Remit periodic coupon/profit payments
     Cagamas->>Trustee: Provide reporting and compliance confirmations
-
     %% Phase 4: Maturity
     Cagamas->>PaymentAgent: Transfer redemption amount
-    PaymentAgent->>Investor: Redeem principal at maturity
+    PaymentAgent->>ADI: Forward redemption details
+    ADI->>Investor: Redeem principal at maturity
     Cagamas->>Trustee: Confirm bond/sukuk fully settled
