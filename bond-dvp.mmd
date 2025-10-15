@@ -1,0 +1,37 @@
+sequenceDiagram
+    title Bonds DvP Settlement Process (FAST & RENTAS CSD)
+
+    participant Investor
+    participant ParticipantBank as Participant Bank (Buyer/Seller)
+    participant FAST as FAST (Bonds System)
+    participant RENTAS as RENTAS (Funds & Securities Settlement)
+    participant RENTASCSD as RENTAS CSD (Central Securities Depository)
+
+    %% Trade Execution
+    Investor->>ParticipantBank: 1. Place bond purchase order
+    ParticipantBank->>FAST: 2. Submit bond purchase details
+
+    %% Trade Confirmation and Matching
+    FAST->>FAST: 3. Match trade (buyer/seller)
+    FAST-->>ParticipantBank: 4. Trade confirmation notice (SWIFT ISO15022 MT515 / ISO20022 secl:TrdConf)
+
+    %% Pre-Settlement Instructions
+    ParticipantBank->>RENTAS: 5. Send DvP settlement instruction (SWIFT ISO15022 MT540–543 / ISO20022 secl:DeliveringV03)
+    RENTAS->>FAST: 6. Validate bond and counterparty details
+    FAST-->>RENTAS: 7. Confirm bond availability (SWIFT ISO20022 secl:SctiesSttlmInstrV06)
+
+    %% DvP Settlement (Simultaneous Funds and Securities)
+    par Simultaneous DvP Process
+        RENTAS->>ParticipantBank: 8a. Debit buyer’s cash account (SWIFT ISO20022 pacs.009)
+        RENTAS->>RENTASCSD: 8b. Transfer bonds to buyer’s securities account (SWIFT ISO20022 secl:SctiesSttlmTxInstrV05)
+    end
+
+    %% Confirmation
+    RENTAS-->>ParticipantBank: 9. Funds settlement confirmation (SWIFT ISO20022 camt.054)
+    RENTASCSD-->>FAST: 10. Securities settlement confirmation (SWIFT ISO20022 secl:SctiesSttlmTxStsAdvcV05)
+    FAST-->>ParticipantBank: 11. Bond delivered confirmation notice
+    ParticipantBank-->>Investor: 12. Confirm successful DvP settlement
+
+    %% Post Settlement
+    RENTASCSD->>FAST: 13. Update securities registry
+    FAST-->>RENTASCSD: 14. Acknowledge registry update (SWIFT ISO20022 secl:SctiesBalRptV03)
